@@ -1,0 +1,154 @@
+/* ==============================
+   HERO
+============================== */
+.cert-hero {
+  min-height: 55vh;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  text-align: center;
+  padding: 4rem 2rem 0;
+}
+
+.cert-hero h1 {
+  font-size: clamp(2.6rem, 6vw, 4rem);
+  margin-bottom: 1rem;
+}
+
+.cert-hero p {
+  max-width: 720px;
+  margin: auto;
+  color: var(--text-secondary);
+  font-size: 1.05rem;
+}
+
+/* Category Filters Styling */
+.cert-filters {
+  justify-content: center;
+  margin-top: 2.2rem !important;
+}
+
+/* ==============================
+   MUSEUM GRID
+============================== */
+.cert-museum {
+  max-width: 1400px;
+  margin: auto;
+  padding: 4rem 2rem 6rem;
+
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 3rem;
+}
+
+/* ==============================
+   CERTIFICATE CARD CONTAINER
+============================== */
+.cert-frame-container {
+  position: relative;
+  border-radius: 22px;
+  overflow: hidden;
+  background: linear-gradient(
+    135deg,
+    rgba(255,255,255,0.12),
+    rgba(255,255,255,0.04)
+  );
+  backdrop-filter: blur(18px);
+  border: 1px solid rgba(255,255,255,0.15);
+  box-shadow: 0 35px 90px rgba(0,0,0,0.6);
+  transition: transform 0.45s ease, box-shadow 0.45s ease;
+  width: 100%;
+}
+
+/* Museum grid layout image box */
+.cert-frame-container .cert-image-box {
+  margin-bottom: 0;
+  border-bottom: 1px solid rgba(255,255,255,0.1);
+  border-radius: 0;
+}
+
+/* Meta info */
+.cert-frame-container .cert-meta {
+  padding: 1.4rem 1.5rem 1.6rem;
+  text-align: center;
+}
+
+.cert-frame-container .cert-meta h4 {
+  font-size: 1rem;
+  margin-bottom: 0.4rem;
+  color: white;
+  white-space: normal;
+}
+
+.cert-frame-container .cert-meta span {
+  font-size: 0.85rem;
+  color: var(--text-secondary);
+}
+
+/* Hover – museum spotlight */
+.cert-frame-container::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(
+    circle at top center,
+    rgba(255,255,255,0.25),
+    transparent 60%
+  );
+  opacity: 0;
+  transition: opacity 0.4s ease;
+  pointer-events: none;
+  z-index: 5;
+}
+
+.cert-frame-container:hover::after {
+  opacity: 1;
+}
+
+.cert-frame-container:hover {
+  transform: translateY(-12px) scale(1.02);
+  box-shadow:
+    0 55px 140px rgba(0,0,0,0.85),
+    0 0 60px rgba(34,211,238,0.2);
+}
+
+/* Museum Grid card entrance animation */
+.reveal.active {
+  animation: cardFadeIn 0.6s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+  opacity: 0;
+  transform: translateY(30px);
+}
+
+@keyframes cardFadeIn {
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* ==============================
+   MOBILE
+============================== */
+@media (max-width: 768px) {
+  .cert-museum {
+    gap: 1.5rem;
+    padding: 2.5rem 1rem 4rem;
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  }
+
+  .cert-frame-container .cert-image-box {
+    height: 170px;
+  }
+}
+
+@media (max-width: 480px) {
+  .cert-museum {
+    gap: 1.2rem;
+    padding: 2rem 0.5rem 3rem;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  }
+
+  .cert-frame-container .cert-image-box {
+    height: 150px;
+  }
+}

@@ -1,0 +1,542 @@
+/* =====================================================
+   RESET & SAFETY
+===================================================== */
+*,
+*::before,
+*::after {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+html, body {
+  width: 100%;
+  overflow-x: hidden;
+}
+
+body.scroll-locked {
+  overflow: hidden !important;
+  height: 100vh !important;
+  touch-action: none;
+  -webkit-overflow-scrolling: auto;
+}
+html.scroll-locked {
+  overflow: hidden !important;
+  height: 100vh !important;
+  touch-action: none;
+  scroll-behavior: auto !important; /* disable smooth scroll while locked to prevent bypasses */
+}
+
+
+/* =====================================================
+   ROOT VARIABLES
+===================================================== */
+:root {
+  --bg-dark: #020617;
+
+  --bg-glass: rgba(255, 255, 255, 0.08);
+  --border-glass: rgba(255, 255, 255, 0.15);
+
+  --text-primary: #ffffff;
+  --text-secondary: rgba(229, 231, 235, 0.75);
+
+  --accent: #22d3ee;
+  --accent-2: #a855f7;
+}
+
+/* =====================================================
+   BASE
+===================================================== */
+html {
+  scroll-behavior: smooth;
+  /* Root canvas background = dark theme. html background paints at stacking step 1
+     (behind everything, including the canvas at step 2). This ensures no white
+     viewport flicker even before the canvas loads. */
+  background: #020617;
+}
+
+body {
+  font-family: "Inter", system-ui, -apple-system, BlinkMacSystemFont, sans-serif;
+  /* MUST be transparent. body { position: relative } makes body a positioned element
+     at z-index: auto (stacking step 6), which paints AFTER the canvas (step 2).
+     If body has any opaque background it covers the canvas everywhere. */
+  background: transparent !important;
+  color: var(--text-primary);
+  min-height: 100vh;
+  position: relative;
+}
+
+.portfolio-app {
+  width: 100%;
+  max-width: 100%;
+  /* DO NOT add overflow-x: hidden here. overflow + position:relative makes this
+     element a containing block for position:fixed children (the canvas), which
+     prevents the fixed canvas from covering the full viewport. overflow-x:hidden
+     is already handled on html+body above. */
+  position: relative;
+  transition: transform 0.6s cubic-bezier(0.25, 1, 0.5, 1), filter 0.6s ease;
+}
+
+/* =====================================================
+   BACKGROUND (CANVAS + BLOBS)
+===================================================== */
+#bg-canvas {
+  position: fixed;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  z-index: -10;
+  pointer-events: none;
+  background: radial-gradient(circle at top, #0f172a, #020617 70%);
+  /* Promote canvas to its own GPU compositor layer */
+  will-change: transform;
+  transform: translate3d(0, 0, 0);
+}
+
+.blob {
+  position: fixed;
+  width: 480px;
+  height: 480px;
+  border-radius: 50%;
+  filter: blur(120px);
+  opacity: 0.5;
+  z-index: -9;
+  pointer-events: none;
+  /* Promote blobs to their own GPU compositor layer so blob animation
+     never triggers a main-thread paint on every frame */
+  will-change: transform;
+  transform: translate3d(0, 0, 0);
+}
+
+.blob-1 {
+  top: -220px;
+  left: -220px;
+  background: radial-gradient(circle, rgba(34, 211, 238, 0.9), transparent 70%);
+}
+
+.blob-2 {
+  bottom: -240px;
+  right: -240px;
+  background: radial-gradient(circle, rgba(168, 85, 247, 0.85), transparent 70%);
+}
+
+/* =====================================================
+   MOBILE PERFORMANCE OVERRIDES
+   Eliminate the #1 GPU bottleneck: backdrop-filter blur.
+   Glass cards switch to a solid-dark background instead.
+===================================================== */
+@media (max-width: 768px) {
+  :root {
+    /* Solid dark panel replaces the blurred glass on mobile */
+    --bg-glass: rgba(10, 18, 40, 0.97);
+  }
+
+  /* Kill all backdrop-filter calls on mobile — this is the primary
+     cause of dropped frames and scroll stutter on mobile GPUs. */
+  *, *::before, *::after {
+    backdrop-filter: none !important;
+    -webkit-backdrop-filter: none !important;
+  }
+
+  /* Smaller blobs cut mobile paint area by ~4× */
+  .blob {
+    width: 240px;
+    height: 240px;
+    filter: blur(60px);
+    opacity: 0.35;
+  }
+}
+
+/* =====================================================
+   HEADER OFFSET
+===================================================== */
+main {
+  /* DO NOT add z-index here. position:relative + z-index creates a stacking
+     context that could interfere with the fixed canvas z-ordering. */
+  position: relative;
+  padding-top: 72px; /* fixed header height */
+}
+
+/* =====================================================
+   GLOBAL SECTIONS
+===================================================== */
+section {
+  width: 100%;
+  padding: 6rem 1.5rem;
+}
+
+.section-container {
+  max-width: 1200px;
+  margin: auto;
+}
+
+/* Mobile spacing */
+@media (max-width: 768px) {
+  section {
+    padding: 4rem 1.25rem;
+  }
+}
+
+/* =====================================================
+   TYPOGRAPHY
+===================================================== */
+h1, h2, h3 {
+  font-weight: 700;
+  letter-spacing: -0.02em;
+}
+
+h1 {
+  font-size: clamp(2.2rem, 7vw, 3.6rem);
+}
+
+h2 {
+  font-size: clamp(1.8rem, 5vw, 2.8rem);
+}
+
+p {
+  line-height: 1.65;
+  color: var(--text-secondary);
+  font-size: 0.95rem;
+}
+
+/* =====================================================
+   HERO
+===================================================== */
+#home {
+  min-height: calc(100vh - 72px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+}
+
+.hero-container {
+  max-width: 900px;
+  margin: auto;
+}
+
+/* =====================================================
+   GLASS PANELS
+===================================================== */
+.glass {
+  background: linear-gradient(
+    135deg,
+    rgba(255, 255, 255, 0.12),
+    rgba(255, 255, 255, 0.04)
+  );
+  backdrop-filter: blur(22px);
+  border: 1px solid rgba(255, 255, 255, 0.18);
+  border-radius: 26px;
+  box-shadow: 0 40px 120px rgba(0, 0, 0, 0.6);
+}
+
+/* =====================================================
+   BUTTONS
+===================================================== */
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  padding: 0.75rem 1.4rem;
+  border-radius: 999px;
+  border: 1px solid var(--border-glass);
+  background: var(--bg-glass);
+  color: var(--text-primary);
+  cursor: pointer;
+  backdrop-filter: blur(14px);
+  transition: all 0.3s cubic-bezier(0.25, 1, 0.5, 1);
+  text-decoration: none;
+  font-size: 0.92rem;
+  line-height: 1.2;
+}
+
+.btn.primary {
+  background: linear-gradient(135deg, #06b6d4 0%, #8b5cf6 100%);
+  color: #ffffff;
+  font-weight: 600;
+  border: none;
+  box-shadow: 0 4px 15px rgba(6, 182, 212, 0.35);
+}
+
+.btn-outline {
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  color: #ffffff;
+}
+
+.btn-outline:hover {
+  background: rgba(255, 255, 255, 0.12);
+  border-color: var(--accent);
+  box-shadow: 0 0 15px rgba(34, 211, 238, 0.25);
+}
+
+.btn:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 18px 45px rgba(0, 0, 0, 0.5);
+}
+
+/* =====================================================
+   UTILITIES
+===================================================== */
+.center {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.hidden {
+  display: none !important;
+}
+
+/* =====================================================
+   FLOATING ACTIONS – FINAL, CLEAN, CHATGPT-STYLE
+===================================================== */
+
+.floating-actions {
+  position: fixed;
+  right: 20px;
+  bottom: 20px;
+
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+
+  z-index: 10050;
+  transition: opacity 0.3s ease, transform 0.3s ease;
+}
+
+/* AUTO HIDE */
+.floating-actions.hide {
+  opacity: 0;
+  transform: translateY(20px);
+  pointer-events: none;
+}
+
+/* =====================================================
+   FLOATING BUTTONS
+===================================================== */
+
+.chatbot-fab,
+.whatsapp-fab {
+  width: 56px;
+  height: 56px;
+  border-radius: 50%;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  font-size: 24px;
+  cursor: pointer;
+  border: none;
+  text-decoration: none;
+}
+
+/* Chatbot button */
+.chatbot-fab {
+  background: linear-gradient(135deg, #6366f1, #a855f7);
+  color: #fff;
+  box-shadow: 0 12px 35px rgba(99, 102, 241, 0.6);
+}
+
+/* WhatsApp button */
+.whatsapp-fab {
+  background: linear-gradient(135deg, #25d366, #1ebe57);
+  color: #fff;
+  box-shadow: 0 12px 35px rgba(37, 211, 102, 0.6);
+}
+
+/* Hover */
+.chatbot-fab:hover,
+.whatsapp-fab:hover {
+  transform: scale(1.12);
+}
+
+/* =====================================================
+   CHATBOT PANEL
+===================================================== */
+
+.chatbot-wrapper {
+  position: relative;
+}
+
+.chatbot-panel {
+  position: absolute;
+  right: 0;
+  bottom: 72px;
+
+  width: 340px;
+  max-width: calc(100vw - 32px);
+
+  background: rgba(2, 6, 23, 0.96);
+  backdrop-filter: blur(20px);
+
+  border-radius: 18px;
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  box-shadow: 0 30px 90px rgba(0, 0, 0, 0.8);
+
+  display: flex;
+  flex-direction: column;
+
+  opacity: 0;
+  transform: translateY(16px) scale(0.95);
+  pointer-events: none;
+  transition: all 0.3s cubic-bezier(.22, .61, .36, 1);
+}
+
+.chatbot-panel.show {
+  opacity: 1;
+  transform: translateY(0) scale(1);
+  pointer-events: auto;
+}
+
+/* =====================================================
+   HEADER
+===================================================== */
+
+.chatbot-header {
+  padding: 0.9rem 1rem;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+
+  font-weight: 600;
+}
+
+.chatbot-header button {
+  background: none;
+  border: none;
+  color: #fff;
+  font-size: 1.2rem;
+  cursor: pointer;
+}
+
+/* =====================================================
+   MESSAGES
+===================================================== */
+
+.chatbot-messages {
+  padding: 1rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.6rem;
+
+  overflow-y: auto;
+  max-height: 320px;
+}
+
+.msg {
+  max-width: 85%;
+  padding: 0.55rem 0.8rem;
+  border-radius: 12px;
+  font-size: 0.9rem;
+  line-height: 1.4;
+}
+
+.msg.bot {
+  background: rgba(255, 255, 255, 0.08);
+}
+
+.msg.user {
+  align-self: flex-end;
+  background: linear-gradient(135deg, #22d3ee, #a855f7);
+  color: #020617;
+}
+
+/* =====================================================
+   INPUT BAR – CHATGPT STYLE
+===================================================== */
+
+.chatbot-input {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+
+  padding: 0.7rem;
+  border-top: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.chatbot-input input {
+  flex: 1;
+  height: 38px;
+  border-radius: 999px;
+
+  padding: 0 14px;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  background: rgba(255, 255, 255, 0.08);
+  color: #fff;
+  outline: none;
+}
+
+/* MIC BUTTON */
+.mic-btn {
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+
+  background: rgba(255, 255, 255, 0.1);
+  border: none;
+  cursor: pointer;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.mic-btn::before {
+  content: "🎙️";
+}
+
+/* SEND BUTTON */
+.send-btn {
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+
+  background: linear-gradient(135deg, #22d3ee, #a855f7);
+  border: none;
+  cursor: pointer;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.send-btn::before {
+  content: "➤";
+  color: #020617;
+}
+
+/* =====================================================
+   MOBILE
+===================================================== */
+
+@media (max-width: 768px) {
+  .floating-actions {
+    right: 14px;
+    bottom: 14px;
+  }
+
+  .chatbot-panel {
+    width: calc(100vw - 28px);
+  }
+}
+
+/* Mic listen keyframes */
+@keyframes pulse {
+  0% {
+    transform: scale(1);
+    box-shadow: 0 0 0 0 rgba(239, 68, 68, 0.4);
+  }
+  70% {
+    transform: scale(1.1);
+    box-shadow: 0 0 0 10px rgba(239, 68, 68, 0);
+  }
+  100% {
+    transform: scale(1);
+    box-shadow: 0 0 0 0 rgba(239, 68, 68, 0);
+  }
+}

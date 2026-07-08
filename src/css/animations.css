@@ -1,0 +1,110 @@
+.fade-up {
+  opacity: 0;
+  transform: translateY(20px);
+  transition: all 0.8s ease;
+}
+
+.fade-up.show {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+@keyframes float {
+  0% {
+    transform: translateY(0) translateX(0);
+  }
+  50% {
+    transform: translateY(40px) translateX(30px);
+  }
+  100% {
+    transform: translateY(0) translateX(0);
+  }
+}
+
+.blob {
+  animation: float 18s ease-in-out infinite;
+}
+
+.tilt {
+  transform-style: preserve-3d;
+}
+
+.tilt:hover {
+  transform: perspective(900px) rotateX(8deg) rotateY(-8deg) translateY(-10px);
+}
+
+.project-card::before {
+  content: "";
+  position: absolute;
+  inset: -1px;
+  border-radius: inherit;
+  background: linear-gradient(
+    120deg,
+    transparent,
+    #22d3ee,
+    #a855f7,
+    transparent
+  );
+  opacity: 0;
+  transition: opacity 0.4s ease;
+  z-index: -1;
+}
+
+.project-card:hover::before {
+  opacity: 1;
+}
+
+/* ===== SOFT BLOBS ===== */
+.blob {
+  position: fixed;
+  width: 380px;
+  height: 380px;
+  background: radial-gradient(circle, #22d3ee55, transparent 60%);
+  filter: blur(90px);
+  z-index: -1;
+  animation: floatBlob 12s ease-in-out infinite;
+}
+
+.blob-1 {
+  top: 10%;
+  left: 5%;
+}
+
+.blob-2 {
+  bottom: 10%;
+  right: 5%;
+  background: radial-gradient(circle, #a855f755, transparent 60%);
+}
+
+@keyframes floatBlob {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-60px); }
+}
+
+/* ===== SCROLL REVEAL ===== */
+.reveal {
+  opacity: 0;
+  transform: translateY(40px);
+  transition:
+    opacity 0.8s ease,
+    transform 0.8s ease;
+}
+
+.reveal.active {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* Stagger effect for cards */
+.project-card.reveal {
+  transition-delay: 0.1s;
+}
+
+/* Reduce motion for accessibility */
+@media (prefers-reduced-motion: reduce) {
+  .reveal {
+    transition: none;
+    opacity: 1;
+    transform: none;
+  }
+}

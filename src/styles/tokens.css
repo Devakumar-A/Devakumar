@@ -1,0 +1,72 @@
+:root {
+  /* Color Tokens */
+  --primary-gold: #FFB300;
+  --primary-gold-hover: #FFA000;
+  --accent-yellow: #FFD54F;
+  --primary-orange: #FF6F00;
+  --primary-orange-hover: #E65100;
+
+  /* Nature Colors */
+  --color-grass: #66BB6A;
+  --color-forest: #2E7D32;
+  --color-leaves: #43A047;
+  --color-tree-bark: #795548;
+  --color-flowers: #FF80AB;
+  --color-sky: #64B5F6;
+  --color-river: #42A5F5;
+  --color-mountain: #8D6E63;
+
+  /* Royal Colors */
+  --color-royal-gold: #FBC02D;
+  --color-royal-red: #D32F2F;
+  --color-royal-purple: #7E57C2;
+  --color-royal-blue: #1976D2;
+  --color-royal-white: #FAFAFA;
+  --color-royal-black: #212121;
+
+  /* Status Colors */
+  --status-success-bg: #43A047;
+  --status-success-border: #2E7D32;
+  --status-success-glow: #81C784;
+
+  --status-warning-bg: #FFA726;
+  --status-warning-border: #FB8C00;
+  --status-warning-glow: #FFD54F;
+
+  --status-error-bg: #EF5350;
+  --status-error-border: #C62828;
+  --status-error-glow: #FFCDD2;
+
+  /* Glassmorphism */
+  --glass-bg: rgba(255, 255, 255, 0.18);
+  --glass-border: rgba(255, 255, 255, 0.25);
+  --glass-blur: 24px;
+  --glass-shadow: rgba(0, 0, 0, 0.15);
+
+  /* Shadows */
+  --shadow-small: 0 4px 12px rgba(0, 0, 0, 0.12);
+  --shadow-medium: 0 8px 24px rgba(0, 0, 0, 0.18);
+  --shadow-large: 0 16px 48px rgba(0, 0, 0, 0.24);
+  --shadow-glow: 0 0 30px rgba(255, 193, 7, 0.5);
+
+  /* Border Radii */
+  --radius-small: 12px;
+  --radius-medium: 20px;
+  --radius-large: 32px;
+  --radius-button: 999px;
+  --radius-card: 32px;
+  --radius-dialog: 28px;
+  --radius-input: 20px;
+
+  /* Spacing Scale */
+  --space-8px: 8px;
+  --space-16px: 16px;
+  --space-24px: 24px;
+  --space-32px: 32px;
+  --space-40px: 40px;
+  --space-48px: 48px;
+  --space-64px: 64px;
+  --space-80px: 80px;
+  --space-96px: 96px;
+  --space-128px: 128px;
+}
