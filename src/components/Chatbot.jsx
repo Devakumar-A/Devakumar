@@ -58,43 +58,89 @@ export function Chatbot({ isOpen, setIsOpen }) {
     }
   }, [messages]);
 
-  // Rule-based keyword matching algorithm
+  // ── Advanced NLP-style keyword matching ──────────────────────
   const getBotReply = (userMessage) => {
-    const msg = userMessage.toLowerCase();
+    // 1. Normalise: lowercase, expand contractions, strip punctuation
+    const normalise = (str) =>
+      str
+        .toLowerCase()
+        .replace(/['']/g, "'")
+        .replace(/you're/g, "you are")
+        .replace(/what's/g, "what is")
+        .replace(/who's/g, "who is")
+        .replace(/i'm/g, "i am")
+        .replace(/don't/g, "do not")
+        .replace(/can't/g, "cannot")
+        .replace(/won't/g, "will not")
+        .replace(/[^\w\s]/g, " ")
+        .replace(/\s+/g, " ")
+        .trim();
+
+    const msg = normalise(userMessage);
+    const msgTokens = msg.split(" ");
+
     let bestMatch = null;
     let highestScore = 0;
 
     chatbotKnowledge.forEach((item) => {
       let score = 0;
+
       item.keywords.forEach((keyword) => {
-        if (msg.includes(keyword)) {
-          score++;
+        const kw = keyword.toLowerCase();
+
+        // Full phrase match — highest value
+        if (msg.includes(kw)) {
+          score += kw.split(" ").length * 2; // multi-word phrases score higher
+          return;
         }
+
+        // Token-level partial match
+        const kwTokens = kw.split(" ");
+        kwTokens.forEach((kwToken) => {
+          msgTokens.forEach((msgToken) => {
+            if (msgToken === kwToken) {
+              score += 1; // exact token match
+            } else if (msgToken.length > 3 && kwToken.length > 3) {
+              // Prefix match for partial words (handles typos like "certif" → "certification")
+              if (msgToken.startsWith(kwToken.slice(0, 4)) || kwToken.startsWith(msgToken.slice(0, 4))) {
+                score += 0.5;
+              }
+            }
+          });
+        });
       });
 
-      // Multiply score by priority weight
-      score = score * item.priority;
+      // Weight by priority
+      const weighted = score * item.priority;
 
-      if (score > highestScore) {
-        highestScore = score;
+      if (weighted > highestScore) {
+        highestScore = weighted;
         bestMatch = item;
       }
     });
 
-    if (bestMatch) {
+    // Minimum confidence threshold
+    if (bestMatch && highestScore >= item_priority_threshold(bestMatch)) {
       return bestMatch.reply;
     }
 
-    // Default fallback reply
-    return `🤔 I may not have exact details on that yet.
+    // Smart fallback with topic suggestions
+    return `🤔 I'm not sure I caught that — could you rephrase?
 
-However, based on Devakumar’s profile, he focuses on:
-• AI & Machine Learning
-• Web & UI Engineering
-• Real-world problem solving
+Here are things I know about:
+• Say **"projects"** to see all projects
+• Say **"skills"** for technical expertise
+• Say **"internship"** for work experience
+• Say **"education"** for academic background
+• Say **"certifications"** for credentials
+• Say **"research"** for the Scopus publication
+• Say **"contact"** to get in touch with Devakumar
 
-Try asking about projects, skills, or certifications 🙂`;
+Or try: *"Tell me about NeuroSense"*, *"What tech stack does he use?"*, *"How to hire Devakumar?"* 😊`;
   };
+
+  // Minimum score threshold — low-priority intents need more evidence
+  const item_priority_threshold = (item) => item.priority * 0.8;
 
   const typeWriterMessage = (fullText) => {
     const messageId = Date.now().toString();
