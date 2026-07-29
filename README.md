@@ -1,16 +1,185 @@
-# React + Vite
+# 🌐 Devakumar A - Personal Portfolio
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+Welcome to my personal portfolio website! This portfolio showcases my journey as a **Full Stack Developer**, highlighting my projects, technical skills, certifications, research publications, achievements, and professional experience.
 
-Currently, two official plugins are available:
+## 🚀 Live Portfolio
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Oxc](https://oxc.rs)
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/)
+🔗 **Website:** https://devakumar-a.github.io/Devakumar/
 
-## React Compiler
+---
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+# 👨‍💻 About Me
 
-## Expanding the ESLint configuration
+Hi! I'm **Devakumar A**, a Computer Science Engineer passionate about building modern web applications, solving real-world problems, and continuously learning new technologies.
 
-If you are developing a production application, we recommend using TypeScript with type-aware lint rules enabled. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) for information on how to integrate TypeScript and [`typescript-eslint`](https://typescript-eslint.io) in your project.
+I enjoy working on:
+
+- Full Stack Web Development
+- React.js Applications
+- Node.js Backend Development
+- Firebase & Database Systems
+- AI & Machine Learning
+- Research and Innovation
+
+---
+
+# ✨ Features
+
+- Responsive Modern UI
+- Professional Hero Section
+- About Me
+- Technical Skills
+- Featured Projects
+- Research Publications
+- Certifications
+- Experience Timeline
+- Contact Information
+- Social Media Links
+- Mobile Friendly Design
+- Smooth Animations
+- Fast Loading
+
+---
+
+# 🛠️ Tech Stack
+
+### Frontend
+
+- HTML5
+- CSS3
+- JavaScript
+- React.js
+- Tailwind CSS
+
+### Backend
+
+- Node.js
+- Express.js
+
+### Database
+
+- Firebase
+- Firestore
+- MongoDB
+- PostgreSQL
+
+### Programming Languages
+
+- Java
+- JavaScript
+- Python
+- C
+
+### Tools
+
+- Git
+- GitHub
+- VS Code
+- Firebase Hosting
+- GitHub Pages
+
+---
+
+# 📂 Portfolio Sections
+
+- Home
+- About
+- Skills
+- Projects
+- Experience
+- Publications
+- Certifications
+- Contact
+
+---
+
+# 🏆 Highlights
+
+- Full Stack Developer
+- React.js Developer
+- Node.js Developer
+- Scopus Published Researcher
+- NPTEL Elite + Gold Certified
+- President - Mathoria Maths Club
+- Scientific Program Trainee
+
+---
+
+# 📸 Preview
+
+Visit the live portfolio:
+
+👉 https://devakumar-a.github.io/Devakumar/
+
+---
+
+# 📬 Contact
+
+**Devakumar A**
+
+📧 Email: devak9391@gmail.com
+
+💼 LinkedIn: https://www.linkedin.com/in/devakumar-a-129561305
+
+🐙 GitHub: https://github.com/Devakumar-A
+
+🌐 Portfolio: https://devakumar-a.github.io/Devakumar/
+
+---
+
+# 🚀 Running Locally
+
+Clone the repository
+
+```bash
+git clone https://github.com/Devakumar-A/Devakumar.git
+```
+
+Move into the project
+
+```bash
+cd Devakumar
+```
+
+Open `index.html`
+
+or
+
+Run using VS Code Live Server.
+
+---
+
+# 📈 Future Improvements
+
+- Dark / Light Theme
+- Blog Section
+- Project Filtering
+- Admin Dashboard
+- Visitor Analytics
+- Download Resume
+- Multilingual Support
+- AI Chat Assistant
+
+---
+
+# 🤝 Contributing
+
+Suggestions and improvements are always welcome.
+
+Feel free to fork the repository, create a feature branch, and submit a pull request.
+
+---
+
+# ⭐ Support
+
+If you like this project, please consider giving it a ⭐ on GitHub.
+
+---
+
+## 📄 License
+
+This project is licensed under the MIT License.
+
+---
+
+Made with ❤️ by **Devakumar A**
